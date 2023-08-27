@@ -26,6 +26,7 @@ create table if not exists "employee"
     cin                 varchar not null check ( cin ~ '^[0-9]+$'),
     cnaps               varchar not null check ( cnaps ~ '^[A-Za-z0-9]+$' ),
     children_number     integer            default 0 check ( children_number > -1 ),
+    salary              integer not null,
     birth_date          date    not null,
     entrance_date       date    not null,
     departure_date      date,

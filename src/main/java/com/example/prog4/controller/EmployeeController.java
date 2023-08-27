@@ -58,15 +58,15 @@ public class EmployeeController {
         return "redirect:/employee/list";
     }
 
-    @GetMapping(value = "/show/{eId}/toPdf", produces = APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> toPdf(@PathVariable("eId") String employeeId) {
-        Employee employee = employeeMapper.toView(employeeService.getOne(employeeId));
-        byte[] pdfCardAsBytes = PDFUtils.generatePdf(employee);
+    @GetMapping(value = "/export/{eId}", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> toPdf(@PathVariable("eId") String id) {
+        Employee employee = employeeMapper.toView(employeeService.getOne(id));
+        byte[] bytes = PDFUtils.generatePdf(employee);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "employee.pdf");
-        headers.setContentLength(pdfCardAsBytes.length);
-        return new ResponseEntity<>(pdfCardAsBytes, headers, HttpStatus.OK);
+        headers.setContentLength(bytes.length);
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
 }

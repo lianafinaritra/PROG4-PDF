@@ -99,11 +99,16 @@
       width: 100px;
       height: auto;
     }
+    .list-unstyled {
+      list-style: none;
+    }
     .list-unstyled li {
       margin-right: 10px;
     }
     .container {
       position: relative;
+      border-width: 1px;
+      border-color: black;
     }
   </style>
 </head>
@@ -115,7 +120,7 @@
       <img th:src="${employee.stringImage}" class="profile_img position-absolute top-0"/>
     </td>
     <td class="w-50">
-      <p class="text-center text-uppercase">FICHE EMPLOYÉ</p>
+      <p class="text-center text-uppercase fw-bold">FICHE EMPLOYÉ</p>
       <p>
         <span>Numéro matricule : </span>
         <span th:text="${employee.registrationNumber}"></span>
@@ -129,6 +134,13 @@
         <span th:text="${employee.firstName}"></span>
       </p>
       <p>
+        <span>Âge : </span>
+        <span>
+                    <span th:text="${employee.age}"></span>
+                    <span> ans</span>
+                </span>
+      </p>
+      <p>
         <span>Date d'embauche: </span>
         <span th:text="${employee.entranceDate}"></span>
       </p>
@@ -140,6 +152,24 @@
         <span>Numéro CNAPS: </span>
         <span th:text="${employee.cnaps}"></span>
       </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+  <tr class="mt-3 ms-3 border-2 border-secondary">
+    <td class="text-left w-100">
+      Informations sur le salaire
+      <ul class="list-unstyled">
+        <li>
+          <span>Salaire brut actuel: </span>
+          <span>
+                        <span th:text="${employee.salary}"></span>
+                        <span> Ariary / mois</span>
+                    </span>
+        </li>
+      </ul>
     </td>
   </tr>
   </tbody>

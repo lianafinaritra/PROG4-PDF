@@ -14,8 +14,8 @@
         <img th:src="${employee.stringImage}" alt="no image">
     </div>
     <div class="col-12 d-flex justify-content-start m-lg-5 mb-5 align-items-center">
-        <form th:action="@{/server/employee/show/{eId}/toPdf(eId=${employee.id})}" class="float-end">
-            <button class="btn btn-success form-text" type="submit">Show pdf</button>
+        <form th:action="@{/server/employee/export/{eId}(eId=${employee.id})}" class="float-end">
+            <button class="btn btn-success form-text" type="submit">Export (.pdf)</button>
         </form>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -76,6 +76,14 @@
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
         <label for="csp" class="form-label text-black-50">CSP</label>
         <p id="csp" class="form-control show-fields" th:text="${employee.csp}"></p>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <label for="age" class="form-label text-black-50">Age</label>
+        <p id="age" class="form-control show-fields" th:text="${employee.age}"></p>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <label for="salary" class="form-label text-black-50">Salary</label>
+        <p id="salary" class="form-control show-fields" th:text="${employee.salary} + ' Ariary'"></p>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
         <label for="phones" class="form-label text-black-50">Phone</label>

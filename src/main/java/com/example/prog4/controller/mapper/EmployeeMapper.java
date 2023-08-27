@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -45,6 +47,7 @@ public class EmployeeMapper {
                     .cnaps(employee.getCnaps())
                     .registrationNumber(employee.getRegistrationNumber())
                     .childrenNumber(employee.getChildrenNumber())
+                    .salary(employee.getSalary())
                     // enums
                     .csp(employee.getCsp())
                     .sex(employee.getSex())
@@ -81,6 +84,8 @@ public class EmployeeMapper {
                 .cnaps(employee.getCnaps())
                 .registrationNumber(employee.getRegistrationNumber())
                 .childrenNumber(employee.getChildrenNumber())
+                .salary(employee.getSalary())
+                .age(Math.toIntExact(ChronoUnit.YEARS.between(employee.getBirthDate(), LocalDate.now())))
                 // enums
                 .csp(employee.getCsp())
                 .sex(employee.getSex())
