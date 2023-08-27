@@ -6,6 +6,7 @@ import com.example.prog4.model.Employee;
 import com.example.prog4.model.EmployeeFilter;
 import com.example.prog4.service.CSVUtils;
 import com.example.prog4.service.EmployeeService;
+import com.example.prog4.service.PDFUtils;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -13,13 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_PDF;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @Controller
 @AllArgsConstructor
@@ -28,6 +28,7 @@ public class EmployeeController {
     private EmployeeMapper employeeMapper;
     private EmployeeValidator employeeValidator;
     private EmployeeService employeeService;
+    private final PDFUtils PDFUtils;
 
     @GetMapping("/list/csv")
     public ResponseEntity<byte[]> getCsv(HttpSession session) {
@@ -55,5 +56,17 @@ public class EmployeeController {
         com.example.prog4.repository.entity.Employee domain = employeeMapper.toDomain(employee);
         employeeService.saveOne(domain);
         return "redirect:/employee/list";
+    }
+
+    @GetMapping(value = "/show/{eId}/toPdf", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> toPdf(@PathVariable("eId") String employeeId) {
+        Employee employee = employeeMapper.toView(employeeService.getOne(employeeId));
+        byte[] pdfCardAsBytes = PDFUtils.generatePdf(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "employee.pdf");
+        headers.setContentLength(pdfCardAsBytes.length);
+        return new ResponseEntity<>(pdfCardAsBytes, headers, HttpStatus.OK);
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 public class EmployeeService {
     private EmployeeRepository repository;
     private EmployeeManagerDao employeeManagerDao;
+    private final PDFUtils PDFUtils = new PDFUtils();
 
 
     public Employee getOne(String id) {

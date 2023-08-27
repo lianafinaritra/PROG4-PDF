@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    .profile_img {
+      width: 250px;
+      height: 250px;
+    }
+
+    .position-absolute {
+      position: absolute;
+    }
+
+    .top-0 {
+      top: 0;
+    }
+
+    table {
+      width: 100%;
+      height: 100%;
+    }
+
+    tbody {
+      width: 100%;
+      height: 100%;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-uppercase {
+      text-transform: uppercase;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+
+    .w-50 {
+      width: 50%;
+    }
+
+    .table-head {
+      width: 100%;
+      height: 25%;
+    }
+
+    .phone-list {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .phone-list li {
+      display: inline;
+      margin-right: 5px;
+      padding-right: 5px;
+      border-right: 1px solid #000;
+    }
+
+    .phone-list li:last-child {
+      margin-right: 0;
+      padding-right: 0;
+      border-right: none;
+    }
+  </style>
+  <style>
+    body {
+      box-sizing: border-box;
+      font-size: medium;
+      font-family: Helvetica, serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    #footer {
+      border-top: black 1px solid;
+      display: block;
+      position: running(footer);
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    @page {
+      size: A4;
+      margin-top: 30px;
+      margin-bottom: 30%;
+      @bottom-center {
+        content: element(footer)
+      }
+    }
+  </style>
+  <style>
+    .company-logo {
+      width: 100px;
+      height: auto;
+    }
+    .list-unstyled li {
+      margin-right: 10px;
+    }
+    .container {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+<table class="table">
+  <tbody class="table-head">
+  <tr class="w-50">
+    <td class="w-50 container">
+      <img th:src="${employee.stringImage}" class="profile_img position-absolute top-0"/>
+    </td>
+    <td class="w-50">
+      <p class="text-center text-uppercase">FICHE EMPLOYÉ</p>
+      <p>
+        <span>Numéro matricule : </span>
+        <span th:text="${employee.registrationNumber}"></span>
+      </p>
+      <p>
+        <span>Noms : </span>
+        <span th:text="${employee.lastName}"></span>
+      </p>
+      <p>
+        <span>Prénoms : </span>
+        <span th:text="${employee.firstName}"></span>
+      </p>
+      <p>
+        <span>Date d'embauche: </span>
+        <span th:text="${employee.entranceDate}"></span>
+      </p>
+      <p>
+        <span>Date de départ: </span>
+        <span th:text="${employee.departureDate}"></span>
+      </p>
+      <p>
+        <span>Numéro CNAPS: </span>
+        <span th:text="${employee.cnaps}"></span>
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<footer id="footer">
+  <table class="column">
+    <tbody>
+    <tr>
+      <td class="container w-50 h-200 justify-content-center">
+        <img th:src="${companyConf.logo}" class="company-logo"/>
+      </td>
+      <td class="container w-100 h-200 justify-content-center">
+        <div>
+          <p th:text="${companyConf.name}"></p>
+          <p>
+            <span>NIF: </span>
+            <span th:text="${companyConf.taxIdentity.nif}"></span>
+          </p>
+          <p>
+            <span>STAT: </span>
+            <span th:text="${companyConf.name}"></span>
+          </p>
+        </div>
+      </td>
+      <td class="container w-100 h-200 justify-content-center">
+        <p th:text="${companyConf.address}"></p>
+        <p>
+        <ul class="phone-list">
+          <li th:each="phone : ${companyConf.phones}" th:text="${phone.value}"></li>
+        </ul>
+        </p>
+        <p th:text="${companyConf.email}"></p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</footer>
+</body>
+</html>
