@@ -13,9 +13,24 @@
     <div class="col-12 d-flex justify-content-start ms-3 mb-5 align-items-center">
         <img th:src="${employee.stringImage}" alt="no image">
     </div>
-    <div class="col-12 d-flex justify-content-start m-lg-5 mb-5 align-items-center">
+    <div class="col-12 d-flex justify-content-start m-lg-5 mb-2 align-items-center">
         <form th:action="@{/server/employee/export/{eId}(eId=${employee.id})}" class="float-end">
             <button class="btn btn-success form-text" type="submit">Export (.pdf)</button>
+        </form>
+    </div>
+    <div class="col-12 d-flex justify-content-start m-lg-5 mb-2 align-items-center">
+        <form th:action="@{/server/employee/exportYearOnly/{eId}(eId=${employee.id})}" class="float-end">
+            <button class="btn btn-success form-text" type="submit">Export to Year Only(.pdf)</button>
+        </form>
+    </div>
+    <div class="col-12 d-flex justify-content-start m-lg-5 mb-5 align-items-center">
+        <form th:action="@{/server/employee/exportCustomDelay/{eId}/{delay}(eId=${employee.id},delay=__${delay}__)}" class="float-end">
+            <div class="col-lg-4 col-md-6">
+                <label for="delay" class="form-label">Days</label>
+                <input required id="delay" type="number" min="0" name="delay"
+                       class="form-control">
+            </div>
+            <button class="btn btn-success form-text" type="submit">Export to Custom Delay(.pdf)</button>
         </form>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">

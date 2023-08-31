@@ -1,10 +1,12 @@
 package com.example.prog4.controller.mapper;
 
 import com.example.prog4.model.Employee;
+import com.example.prog4.model.enums.AgeParam;
 import com.example.prog4.model.exception.BadRequestException;
 import com.example.prog4.repository.PositionRepository;
 import com.example.prog4.repository.entity.Phone;
 import com.example.prog4.repository.entity.Position;
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -74,7 +76,35 @@ public class EmployeeMapper {
         }
     }
 
-    public Employee toView(com.example.prog4.repository.entity.Employee employee) {
+    public Employee toView(com.example.prog4.repository.entity.Employee employee, @Nullable AgeParam ageParam) {
+        if(ageParam == AgeParam.YEAR_ONLY){
+            return Employee.builder()
+                    .id(employee.getId())
+                    .firstName(employee.getFirstName())
+                    .lastName(employee.getLastName())
+                    .address(employee.getAddress())
+                    .cin(employee.getCin())
+                    .cnaps(employee.getCnaps())
+                    .registrationNumber(employee.getRegistrationNumber())
+                    .childrenNumber(employee.getChildrenNumber())
+                    .salary(employee.getSalary())
+                    .age(calculateAge(employee.getBirthDate().getYear()))
+                    // enums
+                    .csp(employee.getCsp())
+                    .sex(employee.getSex())
+                    .stringImage(employee.getImage())
+                    // emails
+                    .professionalEmail(employee.getProfessionalEmail())
+                    .personalEmail(employee.getPersonalEmail())
+                    // dates
+                    .birthDate(employee.getBirthDate())
+                    .departureDate(employee.getDepartureDate())
+                    .entranceDate(employee.getEntranceDate())
+                    // lists
+                    .phones(employee.getPhones().stream().map(phoneMapper::toView).toList())
+                    .positions(employee.getPositions())
+                    .build();
+        }
         return Employee.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
@@ -101,5 +131,39 @@ public class EmployeeMapper {
                 .phones(employee.getPhones().stream().map(phoneMapper::toView).toList())
                 .positions(employee.getPositions())
                 .build();
+    }
+
+    public Employee toViewCustomDelay(com.example.prog4.repository.entity.Employee employee, AgeParam ageParam, int delay) {
+        return Employee.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .address(employee.getAddress())
+                .cin(employee.getCin())
+                .cnaps(employee.getCnaps())
+                .registrationNumber(employee.getRegistrationNumber())
+                .childrenNumber(employee.getChildrenNumber())
+                .salary(employee.getSalary())
+                .age(Math.toIntExact(ChronoUnit.YEARS.between(employee.getBirthDate().minusDays(delay), LocalDate.now())))
+                // enums
+                .csp(employee.getCsp())
+                .sex(employee.getSex())
+                .stringImage(employee.getImage())
+                // emails
+                .professionalEmail(employee.getProfessionalEmail())
+                .personalEmail(employee.getPersonalEmail())
+                // dates
+                .birthDate(employee.getBirthDate())
+                .departureDate(employee.getDepartureDate())
+                .entranceDate(employee.getEntranceDate())
+                // lists
+                .phones(employee.getPhones().stream().map(phoneMapper::toView).toList())
+                .positions(employee.getPositions())
+                .build();
+    }
+
+    public int calculateAge(int birthday) {
+        int currentYear = LocalDate.now().getYear();
+        return currentYear - birthday;
     }
 }

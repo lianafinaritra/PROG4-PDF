@@ -4,6 +4,7 @@ import com.example.prog4.controller.mapper.EmployeeMapper;
 import com.example.prog4.controller.validator.EmployeeValidator;
 import com.example.prog4.model.Employee;
 import com.example.prog4.model.EmployeeFilter;
+import com.example.prog4.model.enums.AgeParam;
 import com.example.prog4.service.CSVUtils;
 import com.example.prog4.service.EmployeeService;
 import com.example.prog4.service.PDFUtils;
@@ -33,7 +34,7 @@ public class EmployeeController {
     @GetMapping("/list/csv")
     public ResponseEntity<byte[]> getCsv(HttpSession session) {
         EmployeeFilter filters = (EmployeeFilter) session.getAttribute("employeeFiltersSession");
-        List<Employee> data = employeeService.getAll(filters).stream().map(employeeMapper::toView).toList();
+        List<Employee> data = employeeService.getAll(filters).stream().map(employee -> employeeMapper.toView(employee, AgeParam.BIRTHDAY)).toList();
 
         String csv = CSVUtils.convertToCSV(data);
         byte[] bytes = csv.getBytes();
@@ -60,7 +61,32 @@ public class EmployeeController {
 
     @GetMapping(value = "/export/{eId}", produces = APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> toPdf(@PathVariable("eId") String id) {
-        Employee employee = employeeMapper.toView(employeeService.getOne(id));
+        Employee employee = employeeMapper.toView(employeeService.getOne(id), AgeParam.BIRTHDAY);
+        byte[] bytes = PDFUtils.generatePdf(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "employee.pdf");
+        headers.setContentLength(bytes.length);
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/exportYearOnly/{eId}", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> toPdfYearOnly(@PathVariable("eId") String id) {
+        Employee employee = employeeMapper.toView(employeeService.getOne(id), AgeParam.YEAR_ONLY);
+        byte[] bytes = PDFUtils.generatePdf(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "employee.pdf");
+        headers.setContentLength(bytes.length);
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/exportCustomDelay/{eId}/{delay}", produces = APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> toPdfCustomDelay(@PathVariable("eId") String id, @PathVariable("delay") int delay) {
+        System.out.println(delay);
+        Employee employee = employeeMapper.toViewCustomDelay(employeeService.getOne(id), AgeParam.CUSTOM_DELAY, delay);
         byte[] bytes = PDFUtils.generatePdf(employee);
 
         HttpHeaders headers = new HttpHeaders();
